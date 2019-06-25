@@ -10,14 +10,60 @@ class SetImpl<T extends Comparable<T>> implements Set<T> {
 	 */
 	@Override
 	public Iterator<T> iterator() {
-		// Iterator implementieren...
-		throw new UnsupportedOperationException();
+		return new Iterator<T>() {
+
+			Stack<Element> agenda = new StackImpl<>();
+
+			{
+				if (root != null) {
+					agenda.push(root);
+				}
+			}
+
+			@Override
+			public boolean hasNext() {
+				return agenda.size() > 0;
+			}
+
+			@Override
+			public T next() {
+
+				Element e = agenda.pop();
+				if (e.left != null) {
+					agenda.push(e.left);
+				}
+				if (e.right != null) {
+					agenda.push(e.right);
+				}
+				return e.val;
+			}
+		};
 	}
 
 	/**
 	 * Bonusaufgabe: Gibt einen Iterator zurück, welcher nur Blätter zurückgibt (Knoten ohne Kinder!)
 	 */
 	public Iterator<T> leafIterator() {
+		return new Iterator<T>() {
+
+			Stack <Element> agenda = new StackImpl <> ();
+
+			{
+				if (root != null) {
+					agenda.push(root);
+				}
+			}
+
+			@Override
+			public boolean hasNext() {
+				return agenda.size() == 0;
+			}
+
+			@Override
+			public T next() {
+				return null;
+			}
+		}
 		throw new UnsupportedOperationException();
 	}
 
